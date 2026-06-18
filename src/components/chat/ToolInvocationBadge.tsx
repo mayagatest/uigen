@@ -1,4 +1,4 @@
-import { ToolInvocation } from "ai";
+import { getToolName } from "ai";
 import { Loader2 } from "lucide-react";
 
 export function getToolLabel(toolName: string, args: Record<string, unknown>): string {
@@ -32,12 +32,13 @@ export function getToolLabel(toolName: string, args: Record<string, unknown>): s
 }
 
 interface ToolInvocationBadgeProps {
-  toolInvocation: ToolInvocation;
+  toolPart: any;
 }
 
-export function ToolInvocationBadge({ toolInvocation }: ToolInvocationBadgeProps) {
-  const isDone = toolInvocation.state === "result" && "result" in toolInvocation && toolInvocation.result;
-  const label = getToolLabel(toolInvocation.toolName, toolInvocation.args as Record<string, unknown>);
+export function ToolInvocationBadge({ toolPart }: ToolInvocationBadgeProps) {
+  const isDone = toolPart.state === "output-available";
+  const toolName = getToolName(toolPart);
+  const label = getToolLabel(toolName, toolPart.input || {});
 
   return (
     <div className="inline-flex items-center gap-2 mt-2 px-3 py-1.5 bg-neutral-50 rounded-lg text-xs font-mono border border-neutral-200">
